@@ -8,12 +8,14 @@ export async function proxy(request: NextRequest) {
     })
 
     if(!session) {
-        return NextResponse.redirect(new URL("/signin", request.url));
+        return NextResponse.redirect(new URL("/login", request.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard",
+    "/model"
+  ],
 };

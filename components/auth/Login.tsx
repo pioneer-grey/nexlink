@@ -32,7 +32,7 @@ export function Login({
           <form>
             <FieldGroup>
               <Field>
-                <Button variant="outline" type="button"
+                <Button type="button"
                 onClick={SignInAction}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

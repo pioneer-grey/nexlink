@@ -13,8 +13,9 @@ export const SignInAction = async () => {
     }
 }
 
-export const SignoutAction = async (router: ReturnType<typeof useRouter>) => {
+export const SignoutAction = async () => {
     try {
+        const router=useRouter()
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {

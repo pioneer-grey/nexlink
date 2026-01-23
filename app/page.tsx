@@ -1,26 +1,19 @@
-import { auth } from "@/lib/auth"; 
-import { headers } from "next/headers";
-export default async function Page() {
+"use client"
+import { SignoutAction } from "@/lib/auth-utils"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+
+import {ModeToggle} from "@/components/theme-toggle"
+
+export default function Page() {
+ const router=useRouter()
     
-const session = await auth.api.getSession({
-    headers: await headers() // you need to pass the headers object.
-})
-if(session){
-    return (
-        <>
-        <div>
-            user id {session.user.id}
-        </div>
-        <div>
-            user image 
-            <img src={session.user.image || ""} alt="user image" />
-        </div>
-        </>
-    )
-}
 return (
-    <>
-    <h1 className="text-green-500 font-bold text-2xl">Subhan</h1>
-    </>
+    <div className="flex gap-4 p-5 h-screen">
+    <Button onClick={SignoutAction} variant={"destructive"}>Logout</Button>
+    <Button onClick={()=>router.push("/dashboard")}>Dashboard</Button>
+    <Button onClick={()=>router.push("/model")} variant={"secondary"}>Model</Button>
+    <ModeToggle/>
+    </div>
 )
 }
