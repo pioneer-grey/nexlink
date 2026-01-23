@@ -4,6 +4,13 @@ import { nextCookies } from "better-auth/next-js";
 import { db } from "@/db/db"
 import * as schema from "@/db/schema"
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+if (!googleClientId || !googleClientSecret) {
+    throw new Error("Missing Google OAuth credentials");
+}
+
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
@@ -12,8 +19,8 @@ export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL,
     socialProviders: {
         google: {
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            clientId: googleClientId,
+            clientSecret:googleClientSecret,
         }
     },
         plugins: [nextCookies()]

@@ -1,6 +1,3 @@
-
-import React from "react"
-import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"; 
 import { headers } from "next/headers";
 export default async function Page() {

@@ -13,8 +13,7 @@ export const SignInAction = async () => {
     }
 }
 
-export const SignoutAction = async () => {
-    const router = useRouter()
+export const SignoutAction = async (router: ReturnType<typeof useRouter>) => {
     try {
         await authClient.signOut({
             fetchOptions: {
@@ -23,9 +22,9 @@ export const SignoutAction = async () => {
                 },
             },
         })
-
     }
     catch (err) {
-        console.log(err)
+        console.error("Sign-out failed:", err)
+        throw err
     }
 }
