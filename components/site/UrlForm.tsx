@@ -60,7 +60,7 @@ export function UrlForm() {
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Add Model</CardTitle>
+        <CardTitle>Add Site</CardTitle>
         <CardDescription>
          Enter a website URL and let our AI scan the site to collect relevant information.
         </CardDescription>
@@ -80,7 +80,7 @@ export function UrlForm() {
                     {...field}
                     id="form-rhf-demo-title"
                     aria-invalid={fieldState.invalid}
-                    placeholder="https://example.com" 
+                    placeholder="https://www.example.com" 
                     autoComplete="off"
                   />
                   {fieldState.invalid && (

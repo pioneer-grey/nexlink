@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, uuid } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -91,3 +91,19 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const site=pgTable("site",{
+  id:uuid("id").defaultRandom().primaryKey(),
+
+  site:text("site").notNull(),
+  siteUrl:text("site_url").notNull(),
+  siteFonts:text("site_fonts").array().notNull(),
+  siteColors:text("site_colors").array().notNull(),
+
+  userId:text("user_id").notNull().references(()=>user.id,{onDelete:"cascade"}),
+  createdAt:timestamp("created_at").defaultNow(),
+
+},(table)=>
+  [index("site_userId_idx").on(table.userId)]
+)
+
