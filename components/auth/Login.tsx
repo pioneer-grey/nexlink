@@ -14,7 +14,7 @@ import {
   FieldGroup,
 } from "@/components/ui/field"
 import { SignInAction } from '@/lib/auth-utils'
-
+import Terms from "@/components/auth/Terms"
 export function Login({
   className,
   ...props
@@ -33,6 +33,7 @@ export function Login({
             <FieldGroup>
               <Field>
                 <Button type="button"
+                className={"cursor-pointer"}
                 onClick={SignInAction}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -46,12 +47,13 @@ export function Login({
               </Field>
             </FieldGroup>
           </form>
+          <FieldDescription className="pt-4 text-center">
+       By signing you agree to our {" "}
+       <Terms/>
+      </FieldDescription>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+      
     </div>
   )
 }

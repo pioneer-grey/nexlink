@@ -10,9 +10,11 @@ export default function Page() {
     
 return (
     <div className="flex gap-4 p-5 h-screen">
-    <Button onClick={SignoutAction} variant={"destructive"}>Logout</Button>
+    <Button onClick={()=>SignoutAction(router)} variant={"destructive"}>Logout</Button>
     <Button onClick={()=>router.push("/dashboard")}>Dashboard</Button>
-    <Button onClick={()=>router.push("/model")} variant={"secondary"}>Model</Button>
+    <Button onClick={()=>router.push("/site")} variant={"secondary"}
+        className={"p-4"}
+        >Site</Button>
     <ModeToggle/>
     </div>
 )
