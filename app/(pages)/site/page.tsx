@@ -20,9 +20,9 @@ const router=useRouter()
     <>
     <header className='absolute z-10'>
       <Button 
-      className="font-bold m-2 cursor-pointer"
+      className="font-light m-2 cursor-pointer rounded-full"
       variant={"ghost"}
-      onClick={handelBack}><ArrowLeft/> Back</Button>
+      onClick={handelBack}><ArrowLeft/>Back</Button>
     </header>
     <div className='h-screen flex items-center justify-center'>
     <UrlForm/>
