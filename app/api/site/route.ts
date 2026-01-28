@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { scrapeData } from "@/lib/playwright/scrapData";
 import { uploadImg } from "@/lib/uploadImg";
 import { appDescription } from "@/lib/ai/appDescription";
+import { handleApiError } from "@/lib/handleApiError";
 
 export async function GET(req: NextRequest) {
-    const searchParams = req.nextUrl.searchParams
+    try{
+         const searchParams = req.nextUrl.searchParams
     const url = searchParams.get("url")
 
     if (!url) return NextResponse.json({message:"Url is required"},{status:400})
@@ -23,4 +25,9 @@ export async function GET(req: NextRequest) {
         url:data.url,
         ai:text,
     })
+    }
+    catch(err){
+        return handleApiError(err)
+    }
+   
 }

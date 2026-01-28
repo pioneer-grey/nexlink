@@ -1,12 +1,21 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 
+const endpoint= process.env.CLOUDFLARE_R2_ENDPOINT
+const accessKeyId= process.env.CLOUDFLARE_R2_ACCESS_KEY
+const secretAccessKey=process.env.CLOUDFLARE_R2_SECRET_KEY
+const accountId=process.env.CLOUDFLARE_ACCOUNT_ID
+
+if(!endpoint||!accessKeyId!|| !secretAccessKey || !accountId){
+  throw new Error("Cloudflare enviroment variable is not set ")
+}
+
 const r2 = new S3Client({
   region: "auto",
-  endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
+  endpoint: endpoint,
   credentials: {
-    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY!,
-    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_KEY!
+    accessKeyId: accessKeyId,
+    secretAccessKey:secretAccessKey
   }
 });
 
@@ -22,11 +31,11 @@ export const uploadImg=async(buffer: Buffer,bucket:string):Promise<string>=> {
       ContentType: "image/png"
     })
   );
-    return `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.dev/${key}`;
+    return `https://${accountId}.r2.dev/${key}`;
 
   }
-  catch{
-   throw new Error("Failed to upload image to R2:");
+  catch(err){
+   throw err
   }
 
 }

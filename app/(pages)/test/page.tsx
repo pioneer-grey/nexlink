@@ -7,7 +7,7 @@ const page = () => {
     const [img,setimg]=useState<string>()
     const submit=async()=>{
         try{
-            const url="https://www.grafics.io/"
+            const url="https://www.example.com/"
             const res=await axios.get(`http://localhost:3000/api/site?url=${url}`)
             setData(res.data.colors)
             setimg(res.data.imgUrl)

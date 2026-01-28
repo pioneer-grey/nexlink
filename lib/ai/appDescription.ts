@@ -10,6 +10,4 @@ export const appDescription = async ( h1: string[], h2: string[], p: string[]): 
         Paragraph: ${p}`,
         });
         return text
-
-
 }
