@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-
+import { randomUUID } from "crypto";
 
 const r2 = new S3Client({
   region: "auto",
@@ -10,14 +10,13 @@ const r2 = new S3Client({
   }
 });
 
-export async function uploadScreenshot(buffer: Buffer) {
-  const timestamp = Date.now(); 
-  const key = `screenshots/screenshot_${timestamp}.png`;
+export const uploadImg=async(buffer: Buffer,bucket:string):Promise<string>=> {
+  const key = `${bucket}_${randomUUID()}.png`;
 
   try{
      await r2.send(
     new PutObjectCommand({
-      Bucket: "screenshots",
+      Bucket:bucket,
       Key: key,
       Body: buffer,
       ContentType: "image/png"
@@ -26,8 +25,8 @@ export async function uploadScreenshot(buffer: Buffer) {
     return `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.dev/${key}`;
 
   }
-  catch(err){
-    console.log(err)
+  catch{
+   throw new Error("Failed to upload image to R2:");
   }
 
 }

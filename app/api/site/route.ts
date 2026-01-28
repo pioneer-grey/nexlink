@@ -1,24 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { scrapeData } from "@/lib/playwright-utils";
-import { uploadScreenshot } from "@/lib/upload-ss";
-import { generateText } from 'ai';
-import { groq } from '@ai-sdk/groq';
+import { scrapeData } from "@/lib/playwright/scrapData";
+import { uploadImg } from "@/lib/uploadImg";
+import { appDescription } from "@/lib/ai/appDescription";
 
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     const url = searchParams.get("url")
 
-    if (!url) return null
+    if (!url) return NextResponse.json({message:"Url is required"},{status:400})
+
     const data = await scrapeData(url)
 
-        const { text } = await generateText({
-            model: groq('llama-3.3-70b-versatile'),
-            prompt: `Generate a clear 100 words description of the website.
-    H1: ${data.h1},
-    H2:${data.h2}
-    Paragraph: ${data.p}`,
-        });
-    const img_url=await uploadScreenshot(data.ss)
+    const text=await appDescription(data.h1,data.h2,data.p)
+
+    const img_url=await uploadImg(data.ss,"screenshots")
 
     return NextResponse.json({
         colors:data.brandColors,
