@@ -26,7 +26,7 @@ export const SiteLoader = () => {
       </CardHeader>
       <CardContent>
          <Progress value={progress} className="w-full max-w-sm">
-      <ProgressLabel>Analyzing..</ProgressLabel>
+      <ProgressLabel>Analyzing...</ProgressLabel>
       <ProgressValue />
     </Progress>
       </CardContent>
