@@ -4,7 +4,11 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation'
 import {UrlForm} from "@/components/site/UrlForm"
+import { useScanPage } from "@/hooks/useScanPage"
+import {SiteLoader} from '@/components/site/siteLoader';
+
 const page = () => {
+  const {mutateAsync,isPending,data}=useScanPage()
 const router=useRouter()
 
   const handelBack=()=>{
@@ -14,6 +18,13 @@ const router=useRouter()
     else{
       router.push("/")
     }
+  }
+
+  const submit=async(url:string)=>{
+    await mutateAsync(url)
+  }
+  if(data){
+    console.log(data)
   }
   
   return (
@@ -25,7 +36,7 @@ const router=useRouter()
       onClick={handelBack}><ArrowLeft/>Back</Button>
     </header>
     <div className='h-screen flex items-center justify-center'>
-    <UrlForm/>
+     {isPending ? <SiteLoader/> :  <UrlForm submit={submit}/>} 
     </div>
     </>
   )

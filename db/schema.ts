@@ -98,7 +98,10 @@ export const site=pgTable("site",{
   site:text("site").notNull(),
   siteUrl:text("site_url").notNull(),
   siteFonts:text("site_fonts").array().notNull(),
+  
   siteColors:text("site_colors").array().notNull(),
+  siteImg:text("site_img").notNull(),
+  siteDescription:text("site_description").notNull(),
 
   userId:text("user_id").notNull().references(()=>user.id,{onDelete:"cascade"}),
   createdAt:timestamp("created_at").defaultNow(),

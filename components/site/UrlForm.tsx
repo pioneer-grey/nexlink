@@ -3,7 +3,6 @@
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
-import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
+
 const formSchema = z.object({
   Url: z
     .string()
@@ -32,7 +32,7 @@ const formSchema = z.object({
     .url("Invalid URL"),
 })
 
-export function UrlForm() {
+export function UrlForm({submit}:{submit:(url:string)=>Promise<void>}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,21 +40,13 @@ export function UrlForm() {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    })
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try{
+      await submit(data.Url)
+    }
+    catch(err){
+      console.log(err)
+    }
   }
 
   return (

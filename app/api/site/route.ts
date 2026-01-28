@@ -4,10 +4,10 @@ import { uploadImg } from "@/lib/uploadImg";
 import { appDescription } from "@/lib/ai/appDescription";
 import { handleApiError } from "@/lib/handleApiError";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try{
-         const searchParams = req.nextUrl.searchParams
-    const url = searchParams.get("url")
+    
+    const {url}=await req.json()
 
     if (!url) return NextResponse.json({message:"Url is required"},{status:400})
 

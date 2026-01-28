@@ -7,7 +7,7 @@ const secretAccessKey=process.env.CLOUDFLARE_R2_SECRET_KEY
 const accountId=process.env.CLOUDFLARE_ACCOUNT_ID
 
 if(!endpoint||!accessKeyId!|| !secretAccessKey || !accountId){
-  throw new Error("Cloudflare enviroment variable is not set ")
+  throw new Error("Cloudflare enviroment variables are not set ")
 }
 
 const r2 = new S3Client({
