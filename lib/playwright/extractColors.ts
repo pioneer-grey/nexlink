@@ -1,6 +1,6 @@
 
 
-export const extractColors = async (page: any) => {
+export const extractColors = async (page: any): Promise<string[]> => {
   return await page.evaluate(() => {
     const rgbToHex = (rgb: string) => {
       const m = rgb.match(/\d+/g);
@@ -14,10 +14,10 @@ export const extractColors = async (page: any) => {
 
     const isLargeEnough = (el: Element) => {
       const r = el.getBoundingClientRect();
-      return r.width * r.height > 15_000; 
+      return r.width * r.height > 15_000;
     };
 
-    const colors: Record<string, number> = {};
+    const colors = new Set<string>();
 
     document
       .querySelectorAll("section, main, header, footer, div")
@@ -25,23 +25,13 @@ export const extractColors = async (page: any) => {
         if (!isLargeEnough(el)) return;
 
         const bg = getComputedStyle(el).backgroundColor;
-        if (
-          !bg ||
-          bg === "transparent" ||
-          bg === "rgba(0, 0, 0, 0)"
-        )
-          return;
+        if (!bg || bg === "transparent" || bg === "rgba(0, 0, 0, 0)") return;
 
         const hex = rgbToHex(bg);
-        if (!hex) return;
-
-        colors[hex] = (colors[hex] || 0) + 1;
+        if (hex) colors.add(hex);
       });
 
-    return Object.entries(colors).map(([hex, count]) => ({
-      hex,
-      count
-    }));
+    return Array.from(colors);
   });
 };
 
@@ -58,27 +48,23 @@ const colorDistance = (a: number[], b: number[]) =>
 
 
 
-export const mergeColors = (
-  colors: { hex: string; count: number }[]
-) => {
-  const merged: { hex: string; count: number }[] = [];
+export const mergeColors = (colors: string[]) => {
+  const merged: string[] = [];
 
-  for (const c of colors) {
-    const rgb = hexToRgb(c.hex);
-    const existing = merged.find(m =>
-      colorDistance(hexToRgb(m.hex), rgb) < 20
+  for (const hex of colors) {
+    const rgb = hexToRgb(hex);
+
+    const exists = merged.some(
+      m => colorDistance(hexToRgb(m), rgb) < 20
     );
 
-    if (existing) {
-      existing.count += c.count;
-    } else {
-      merged.push({ ...c });
+    if (!exists) {
+      merged.push(hex);
     }
   }
 
   return merged;
 };
-
 
 
 export const snapHex = (hex: string) => {

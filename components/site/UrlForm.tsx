@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/card"
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -52,7 +51,7 @@ export function UrlForm({submit}:{submit:(url:string)=>Promise<void>}) {
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Add Site</CardTitle>
+        <CardTitle>Get Your Site Insights</CardTitle>
         <CardDescription>
          Enter a website URL and let our AI scan the site to collect relevant information.
         </CardDescription>

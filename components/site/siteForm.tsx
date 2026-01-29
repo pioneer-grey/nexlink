@@ -14,23 +14,34 @@ import {
     Label
 
 } from '../ui/label'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { SiteSnapshot} from '@/store/types'
+import { useAddSite } from '@/hooks/useAddSite'
+import { toast } from 'sonner'
 
-type Props = {
-    description: string,
-    colors: { count: number, hex: string }[],
-    fontFamily: string[],
-    imgUrl: string,
-    name: string,
-    url: string,
-}
-
-export const SiteInfo = ({ colors, description, fontFamily, name, imgUrl, url }: Props) => {
+export const SiteForm = ({ colors, description, fontFamily, name, imgUrl, url }:SiteSnapshot ) => {
+    const{isPending,mutateAsync}=useAddSite()
+    const router=useRouter()
+    const submit=async()=>{
+        try{
+            const res=mutateAsync({colors,description,fontFamily,name,imgUrl,url})
+            toast.promise(res,{
+                loading: "Saving analyzed site data…",
+                success: "Site saved successfully",
+            })
+            await res
+            router.push("/dashboard")
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
     return (
         <>
             <Card className="w-full sm:max-w-sm md:max-w-2xl my-10">
                 <CardHeader>
-                    <CardTitle>Business DNA</CardTitle>
+                    <CardTitle>Business Details</CardTitle>
                     <CardDescription>
                     Our AI has captured your brand’s distinctive elements.
                     </CardDescription>
@@ -39,17 +50,17 @@ export const SiteInfo = ({ colors, description, fontFamily, name, imgUrl, url }:
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='space-y-2'>
                             <Label htmlFor='name'>Business Name</Label>
-                            <Input value={name} readOnly name='name' />
+                            <Input value={name} readOnly name='name' id="name" />
                         </div>
                         <div className='space-y-2'>
-                            <Label htmlFor='url'>Business Url</Label>
-                            <Input value={url} readOnly name='url' />
+                            <Label htmlFor='url'>Website URL</Label>
+                            <Input value={url} readOnly name='url' id="url" />
                         </div>
 
 
                         {fontFamily.length>0&&
                          <div className='col-span-2 space-y-2'>
-                            <Label htmlFor='fontFamily '>Font Styles</Label>
+                            <Label htmlFor='fontFamily'>Brand Fonts</Label>
                             {fontFamily.map((item, i) => (
                                 <div key={i} className='border-2  h-auto flex flex-col justify-center p-2 rounded-xl'>
                                     <h5 className='font-bold'>{item}</h5>
@@ -60,7 +71,7 @@ export const SiteInfo = ({ colors, description, fontFamily, name, imgUrl, url }:
                         }
                        
                         <div className='col-span-2 space-y-2'>
-                            <Label >Description</Label>
+                            <Label >Brand Description</Label>
                             <Textarea value={description} readOnly />
                         </div>
 
@@ -72,11 +83,11 @@ export const SiteInfo = ({ colors, description, fontFamily, name, imgUrl, url }:
                                 {colors.map((hexColor, i) => (
                                     <div key={i}>
                                         <div className={cn("w-20 h-20 border rounded-xl")}
-                                            style={{ backgroundColor: hexColor.hex }}
+                                            style={{ backgroundColor: hexColor}}
                                         >
                                         </div>
                                         <p className='mt-2 text-center'>
-                                            {hexColor.hex}
+                                            {hexColor}
                                         </p>
                                     </div>
                                 ))}
@@ -109,10 +120,16 @@ export const SiteInfo = ({ colors, description, fontFamily, name, imgUrl, url }:
                     </div>
                 </CardContent>
                 <CardFooter className='flex justify-end gap-2'>
-                    <Button type="submit" variant={"secondary"} >
+                    <Button type="submit" variant={"secondary"} 
+                    disabled={isPending}
+                    onClick={()=>router.push("/dashboard")}
+                    >
                         Cancel
                     </Button>
-                    <Button type="submit" className="p-4 cursor-pointer">
+                    <Button type="submit" className="p-4 cursor-pointer"
+                    onClick={()=>submit()}
+                    disabled={isPending}
+                    >
                         Save
                     </Button>
                 </CardFooter>

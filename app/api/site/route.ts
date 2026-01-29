@@ -1,33 +1,39 @@
-import { NextRequest, NextResponse } from "next/server";
-import { scrapeData } from "@/lib/playwright/scrapData";
-import { uploadImg } from "@/lib/uploadImg";
-import { appDescription } from "@/lib/ai/appDescription";
-import { handleApiError } from "@/lib/handleApiError";
+import { NextRequest,NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { db } from "@/db/db";
+import { site } from "@/db/schema";
+import { SiteSnapshot } from "@/store/types";
 
-export async function POST(req: NextRequest) {
+export async function POST(req:NextRequest){
     try{
-    
-    const {url}=await req.json()
+        const session = await auth.api.getSession({
+        headers: await headers() })
+        
+        if(!session) return NextResponse.json({message:"Unauthorized"},{status:401})
+        const userId=session?.user.id  
+        
+        const {name,url,imgUrl,description,
+            fontFamily,colors} =await req.json() as SiteSnapshot
 
-    if (!url) return NextResponse.json({message:"Url is required"},{status:400})
+            
+        await db.insert(site).values({
+            site:name,
+            siteUrl:url,
+            siteColors:colors,
+            siteDescription:description,
+            siteFonts:fontFamily,
+            siteImg:imgUrl,
+            userId:userId
+        })
 
-    const data = await scrapeData(url)
-
-    const text=await appDescription(data.h1,data.h2,data.p)
-
-    const img_url=await uploadImg(data.ss,"screenshots")
-
-    return NextResponse.json({
-        colors:data.brandColors,
-        fontFamily:data.fontFamilies,
-        imgUrl:img_url,
-        name:data.appName,
-        url:data.url,
-        ai:text,
-    })
+        return NextResponse.json({
+            message:"Site saved successfully"
+        },{status:200})
     }
-    catch(err){
-        return handleApiError(err)
+    catch{
+        return NextResponse.json({
+            message:"Internal Server Error"
+        },{status:500})
     }
-   
 }

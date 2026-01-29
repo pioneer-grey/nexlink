@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import {UrlForm} from "@/components/site/UrlForm"
 import { useScanPage } from "@/hooks/useScanPage"
 import {SiteLoader} from '@/components/site/siteLoader';
-import { SiteInfo } from '@/components/site/siteInfo';
+import { SiteForm } from '@/components/site/siteForm';
 const page = () => {
   const {mutateAsync,isPending,data}=useScanPage()
 const router=useRouter()
@@ -32,7 +32,7 @@ const router=useRouter()
       onClick={handelBack}><ArrowLeft/>Back</Button>
     </header>
       <div className='flex justify-center'>
-        <SiteInfo name={data.name} url={data.url} colors={data.colors} description={data.ai}
+        <SiteForm name={data.name} url={data.url} colors={data.colors} description={data.description}
         fontFamily={data.fontFamily} imgUrl={data.imgUrl}
         />
       </div>
