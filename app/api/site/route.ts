@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { db } from "@/db/db";
 import { site } from "@/db/schema";
 import { SiteSnapshot } from "@/store/types";
+import { eq } from "drizzle-orm";
 
 export async function POST(req:NextRequest){
     try{
@@ -33,6 +34,27 @@ export async function POST(req:NextRequest){
     }
     catch{
         return NextResponse.json({
+            message:"Internal Server Error"
+        },{status:500})
+    }
+}
+
+export async function GET(){
+    try{
+         const session = await auth.api.getSession({
+        headers: await headers() })
+        
+        if(!session) return NextResponse.json({message:"Unauthorized"},{status:401})
+        const userId=session?.user.id  
+        
+        const result=await db.select().from(site).where(eq(site.userId,userId))
+        
+        return NextResponse.json({
+            data:result
+        },{status:200})
+    }
+    catch{
+         return NextResponse.json({
             message:"Internal Server Error"
         },{status:500})
     }

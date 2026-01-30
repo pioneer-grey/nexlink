@@ -6,8 +6,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { House,Library } from 'lucide-react';
+import { House,Library,WandSparkles } from 'lucide-react';
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 const items=[
     {title:"Dashboard",
         icon:House,
@@ -16,8 +17,14 @@ const items=[
      {title:"Library",
         icon:Library,
         url:'/library'
-    }
+    },
+      {title:"Brands",
+        icon:WandSparkles,
+        url:'/brands'
+    },
+
 ]
+
 export function NavMain() {
     const path =usePathname()
 
@@ -30,10 +37,10 @@ export function NavMain() {
                   <SidebarMenuButton 
                   isActive={path.startsWith(item.url)?true:false}
                   render={
-                     <a href={item.url}>
+                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   }>        
                   </SidebarMenuButton>
                 </SidebarMenuItem>

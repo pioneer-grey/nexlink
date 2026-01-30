@@ -17,7 +17,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
-import { AppWindow } from 'lucide-react';
+import { AppWindow ,WandSparkles,Sparkles } from 'lucide-react';
 export function SiteSwitcher({
   teams,
 }: {
@@ -47,7 +47,7 @@ export function SiteSwitcher({
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate text-xs flex items-center gap-1">Brand</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -61,8 +61,8 @@ export function SiteSwitcher({
   sideOffset={4}
 >
   <DropdownMenuGroup>
-    <DropdownMenuLabel className="text-muted-foreground text-xs pl-2">
-        Business
+    <DropdownMenuLabel className="text-muted-foreground text-xs pl-2 flex items-center gap-1 ">
+       <WandSparkles className="size-3"/>  Brands
     </DropdownMenuLabel>
     {teams.map((team, index) => (
       <DropdownMenuItem
@@ -85,7 +85,7 @@ export function SiteSwitcher({
     <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
       <Plus className="size-4" />
     </div>
-    <div className="text-muted-foreground font-medium">Add business</div>
+    <div className="text-muted-foreground font-medium">Add Brands</div>
   </DropdownMenuItem>
 </DropdownMenuContent>
         </DropdownMenu>
