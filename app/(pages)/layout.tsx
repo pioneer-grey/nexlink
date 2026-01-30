@@ -7,7 +7,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import Navbar from "@/components/sidebar/Navbar"
-import { useGetBrands } from '@/hooks/useGetBrands'
+import { useGetBrand } from '@/hooks/useBrandHook'
 import { useBrands } from '@/store/useBrands'
 import { Spinner } from "@/components/ui/spinner"
 import { useRouter} from 'next/navigation'
@@ -17,7 +17,7 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-   const {data,isLoading}=useGetBrands()
+   const {data,isLoading}=useGetBrand()
   const {setBrands}=useBrands()
 
   const router=useRouter()
