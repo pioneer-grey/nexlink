@@ -47,9 +47,21 @@ export async function GET(){
         if(!session) return NextResponse.json({message:"Unauthorized"},{status:401})
         const userId=session?.user.id  
         
-        const result=await db.select().from(site).where(eq(site.userId,userId))
+        const result=await db.select({
+            name:site.site,
+            id:site.id,
+            imgUrl:site.siteImg,
+            url:site.siteUrl
+        }).from(site).where(eq(site.userId,userId))
         
+        if(result.length<=0){
+            return NextResponse.json({
+            success:false,
+        },{status:200})
+        }
+
         return NextResponse.json({
+            success:true,
             data:result
         },{status:200})
     }

@@ -18,21 +18,21 @@ import {
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
 import { AppWindow ,WandSparkles,Sparkles } from 'lucide-react';
-export function SiteSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-    const router=useRouter()
+import { useBrands } from "@/store/useBrands"
+import { Brand } from "@/store/types"
+export function BrandSwitcher() {
+  const {brands}=useBrands()
+  const router=useRouter()
   const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
-  if (!activeTeam) {
-    return null
-  }
+  const [activeBrand, setActiveBrand] = React.useState<Brand>()
+  
+  React.useEffect(()=>{
+    if(brands){
+      setActiveBrand(brands[0])
+    }
+  },[brands])
+
+  if(brands.length<=0) return null
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -46,7 +46,7 @@ export function SiteSwitcher({
                 <AppWindow className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
+                <span className="truncate font-medium">{activeBrand?.name}</span>
                 <span className="truncate text-xs flex items-center gap-1">Brand</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -64,16 +64,16 @@ export function SiteSwitcher({
     <DropdownMenuLabel className="text-muted-foreground text-xs pl-2 flex items-center gap-1 ">
        <WandSparkles className="size-3"/>  Brands
     </DropdownMenuLabel>
-    {teams.map((team, index) => (
+    {brands.map((brand, index) => (
       <DropdownMenuItem
-        key={team.name}
-        onClick={() => setActiveTeam(team)}
+        key={index}
+        onClick={() => setActiveBrand(brand)}
         className="gap-2 p-2"
       >
         <div className="flex size-6 items-center justify-center rounded-md border">
           < AppWindow className="size-3.5 shrink-0" />
         </div>
-        {team.name}
+        {brand.name}
       </DropdownMenuItem>
     ))}
   </DropdownMenuGroup>

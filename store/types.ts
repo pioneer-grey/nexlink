@@ -6,3 +6,7 @@ export type SiteSnapshot={
     name: string,
     url: string,
 }
+
+export type Brand={
+    id:string,
+} & Pick<SiteSnapshot,"name"|"url"|"imgUrl">
